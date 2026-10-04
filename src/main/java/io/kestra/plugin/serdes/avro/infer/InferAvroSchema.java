@@ -224,12 +224,7 @@ public class InferAvroSchema {
         }
     }
 
-    /**
-     * merge two Avro Field types, trying to output the most precise type possible
-     *
-     * @return the merge Avro Field, same as input if both inputs are relatively equals
-     */
-    static String sanitizeFieldName(String fieldName) {
+    private static String sanitizeFieldName(String fieldName) {
         var sanitized = INVALID_NAME_CHARS.matcher(fieldName).replaceAll("_");
         if (sanitized.isEmpty() || Character.isDigit(sanitized.charAt(0))) {
             sanitized = "_" + sanitized;
@@ -249,6 +244,11 @@ public class InferAvroSchema {
         return name + "_" + counter;
     }
 
+    /**
+     * merge two Avro Field types, trying to output the most precise type possible
+     *
+     * @return the merge Avro Field, same as input if both inputs are relatively equals
+     */
     public static Field mergeTypes(Field a, Field b) {
         if (a.schema().getType() == UNION || b.schema().getType() == UNION) {
             var set = mergeAtLeastOneUnion(a, b);
